@@ -19,6 +19,9 @@ impl EventHandler for Handler {
 
     async fn message(&self, ctx: Context, msg: Message) {
         if !msg.content.starts_with("!") {
+            if let Err(err) = commands::blame(ctx, msg, &self.config).await {
+                log::error!("EventHandler.message failed: {:?}", err);
+            }
             return;
         }
 
@@ -35,6 +38,7 @@ impl EventHandler for Handler {
             "sybau" => commands::sybau(ctx, msg).await,
             "rules" => commands::constitution(ctx, msg, &self.config).await,
             "blow" => commands::blow_away(ctx, msg, &self.config).await,
+            "src" => commands::source(ctx, msg).await,
             _ => Ok(()),
         };
 

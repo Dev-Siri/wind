@@ -8,11 +8,19 @@ use tokio::fs;
 pub struct Config {
     pub server_id: u64,
     pub privileged_roles: Vec<u64>,
+    pub blame: Option<BlameConfig>,
     pub rules_channel_id: u64,
     pub rules_title: String,
     pub rules: String,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BlameConfig {
+    pub response: String,
+    pub phrases: Vec<String>,
+}
+
+pub const PROJECT_SRC: &str = "https://github.com/Dev-Siri/wind";
 const CLIENT_ID_KEY: &str = "DISCORD_CLIENT_ID";
 const TOKEN_KEY: &str = "DISCORD_TOKEN";
 const CONFIG_FILE_NAME: &str = "wind.json";
