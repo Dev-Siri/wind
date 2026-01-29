@@ -39,6 +39,7 @@ impl EventHandler for Handler {
             "rules" => commands::constitution(ctx, msg, &self.config).await,
             "blow" => commands::blow_away(ctx, msg, &self.config).await,
             "src" => commands::source(ctx, msg).await,
+            "slime" => commands::slime(ctx, msg, &self.config).await,
             _ => Ok(()),
         };
 

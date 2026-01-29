@@ -24,6 +24,7 @@ You need to define a config in a `wind.json` file. Example config:
 {
   "rules_channel_id": 1460202768714305566,
   "server_id": 1436348966332665969,
+  "controller_roles": [1466421366545977365],
   "privileged_roles": [
     1436358588821143634, 1441440233261502484, 1449053795081388042
   ],

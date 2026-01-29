@@ -6,11 +6,11 @@ use serenity::all::{ChannelId, Context, CreateEmbed, CreateMessage, Message};
 use crate::{config::Config, utils::is_allowed_operation};
 
 pub async fn constitution(ctx: Context, msg: Message, config: &Config) -> Result<()> {
-    if !is_allowed_operation(&ctx, &msg.author, config).await? {
+    if !is_allowed_operation(&ctx, &msg, config, false).await? {
         return Ok(());
     }
 
-    log::debug!("Recognized Admin: Sent rule command.");
+    log::info!("Recognized Admin: Sent rule command.");
     let rule_channel_id = ChannelId::new(config.rules_channel_id);
 
     let rules_file_contents = fs::read_to_string(config.rules.clone())?;

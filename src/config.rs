@@ -7,6 +7,7 @@ use tokio::fs;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     pub server_id: u64,
+    pub controller_roles: Vec<u64>,
     pub privileged_roles: Vec<u64>,
     pub blame: Option<BlameConfig>,
     pub rules_channel_id: u64,

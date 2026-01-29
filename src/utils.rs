@@ -1,14 +1,35 @@
 use anyhow::Result;
-use serenity::all::{Context, GuildId, RoleId, User};
+use serenity::all::{Context, Message, RoleId};
 
 use crate::config::Config;
 
-pub async fn is_allowed_operation(ctx: &Context, user: &User, config: &Config) -> Result<bool> {
-    let guild_id = GuildId::new(config.server_id);
+pub async fn is_allowed_operation(
+    ctx: &Context,
+    msg: &Message,
+    config: &Config,
+    allow_controllers: bool,
+) -> Result<bool> {
     for role in &config.privileged_roles {
         let role_id = RoleId::new(*role);
-        if user.has_role(ctx, guild_id, role_id).await? {
+        if msg
+            .author
+            .has_role(ctx, msg.guild_id.unwrap(), role_id)
+            .await?
+        {
             return Ok(true);
+        }
+    }
+
+    if allow_controllers {
+        for role in &config.controller_roles {
+            let role_id = RoleId::new(*role);
+            if msg
+                .author
+                .has_role(ctx, msg.guild_id.unwrap(), role_id)
+                .await?
+            {
+                return Ok(true);
+            }
         }
     }
 
