@@ -1,6 +1,5 @@
-use anyhow::Result;
-use dotenv::dotenv;
 use serenity::prelude::*;
+use shuttle_runtime::SecretStore;
 
 use crate::config::load_json_config;
 
@@ -10,20 +9,20 @@ mod event_handler;
 mod media;
 mod utils;
 
-#[tokio::main]
-async fn main() -> Result<()> {
-    dotenv().ok();
-    let (_, token) = config::get_discord_creds()?;
-    env_logger::init();
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_runtime::Secrets] secrets: SecretStore,
+) -> shuttle_serenity::ShuttleSerenity {
+    let token = secrets.get("DISCORD_TOKEN").unwrap();
 
     let intents = GatewayIntents::all();
 
-    let mut client = Client::builder(&token, intents)
+    let client = Client::builder(&token, intents)
         .event_handler(event_handler::Handler {
             config: load_json_config().await?,
         })
-        .await?;
+        .await
+        .expect("Error creating serenity client.");
 
-    client.start().await?;
-    Ok(())
+    Ok(client.into())
 }
