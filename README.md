@@ -10,11 +10,13 @@ Clone the repository.
 $ git clone https://github.com/Dev-Siri/wind
 ```
 
-You need to have Rust installed on your system, as well as the [Shuttle](https://shuttle.dev) runtime.
-Compile and run the project with `shuttle`
+You need to have Rust installed on your system. Compile and run the project with `cargo`
 
 ```sh
-$ shuttle run
+# build
+$ cargo build --release
+# or run
+$ cargo run --release
 ```
 
 ## Usage
@@ -48,9 +50,9 @@ Note the `blame` option's `phrases` field: Since the bot scans messages in lower
 ["Rule 1", "Rule 2", "Rule 3"]
 ```
 
-Additionally, of course you would need a `DISCORD_TOKEN` from the discord developer portal. Create a `Secrets.toml` file and paste it in:
+Additionally, of course you would need a `DISCORD_TOKEN` from the discord developer portal. Create a `.env` file and paste it in:
 
-```toml
+```env
 DISCORD_TOKEN = "<your-discord-token>"
 ```
 

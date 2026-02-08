@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Result, anyhow};
 use serde::{Deserialize, Serialize};
 use tokio::fs;
 
@@ -23,8 +23,10 @@ pub const PROJECT_SRC: &str = "https://github.com/Dev-Siri/wind";
 const CONFIG_FILE_NAME: &str = "wind.json";
 
 pub async fn load_json_config() -> Result<Config> {
-    let config_file_contents = fs::read_to_string(CONFIG_FILE_NAME).await?;
-    let config: Config = serde_json::from_str(&config_file_contents)?;
+    let config_file_contents = fs::read(CONFIG_FILE_NAME)
+        .await
+        .map_err(|e| anyhow!("Failed to load config file: {}", e))?;
+    let config: Config = serde_json::from_slice(&config_file_contents)?;
 
     Ok(config)
 }

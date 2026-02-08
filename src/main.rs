@@ -1,5 +1,7 @@
+use anyhow::{Result, anyhow};
+use dotenv::dotenv;
 use serenity::prelude::*;
-use shuttle_runtime::SecretStore;
+use tokio::fs;
 
 use crate::config::load_json_config;
 
@@ -9,20 +11,22 @@ mod event_handler;
 mod media;
 mod utils;
 
-#[shuttle_runtime::main]
-async fn main(
-    #[shuttle_runtime::Secrets] secrets: SecretStore,
-) -> shuttle_serenity::ShuttleSerenity {
-    let token = secrets.get("DISCORD_TOKEN").unwrap();
+#[tokio::main]
+async fn main() -> Result<()> {
+    if fs::try_exists(".env").await? {
+        dotenv().ok();
+    }
+
+    let token = std::env::var("DISCORD_TOKEN").map_err(|_| anyhow!("Missing DISCORD_TOKEN."))?;
 
     let intents = GatewayIntents::all();
 
-    let client = Client::builder(&token, intents)
+    let mut client = Client::builder(&token, intents)
         .event_handler(event_handler::Handler {
             config: load_json_config().await?,
         })
-        .await
-        .expect("Error creating serenity client.");
+        .await?;
 
-    Ok(client.into())
+    client.start().await?;
+    Ok(())
 }
