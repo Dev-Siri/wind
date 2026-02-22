@@ -3,7 +3,7 @@ use serenity::all::{Context, Message};
 
 use crate::config::Config;
 
-pub async fn blame(ctx: Context, msg: Message, config: &Config) -> Result<()> {
+pub async fn blame(ctx: &Context, msg: &Message, config: &Config) -> Result<()> {
     let blame = match &config.blame {
         Some(cfg) => cfg,
         None => return Ok(()),

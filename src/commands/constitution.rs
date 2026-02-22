@@ -11,7 +11,7 @@ pub async fn constitution(ctx: Context, msg: Message, config: &Config) -> Result
     }
 
     log::info!("Recognized Admin: Sent rule command.");
-    let rule_channel_id = ChannelId::new(config.rules_channel_id);
+    let rule_channel = ChannelId::new(config.rules_channel_id);
 
     let rules_file_contents = fs::read_to_string(config.rules.clone())?;
     let rules_txt: Vec<String> = serde_json::from_str(&rules_file_contents)?;
@@ -26,6 +26,6 @@ pub async fn constitution(ctx: Context, msg: Message, config: &Config) -> Result
         .description(formatted_rules);
     let rule_msg = CreateMessage::new().add_embed(embed);
 
-    rule_channel_id.send_message(&ctx, rule_msg).await?;
+    rule_channel.send_message(&ctx, rule_msg).await?;
     Ok(())
 }

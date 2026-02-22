@@ -9,6 +9,7 @@ pub struct Config {
     pub privileged_roles: Vec<u64>,
     pub blame: Option<BlameConfig>,
     pub rules_channel_id: u64,
+    pub announce_channel_id: u64,
     pub rules_title: String,
     pub rules: String,
 }
